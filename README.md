@@ -2,5 +2,6 @@
 
 ## Inicialização do projeto no Spring Initializr
 
-![image](https://github.com/user-attachments/assets/7e745c5d-3dac-484b-9f3a-b72c1278d843)
+![image](https://github.com/user-attachments/assets/94f5add1-cdf0-47d8-ad03-c26c92962f01)
+
 
