@@ -12,10 +12,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  *
@@ -25,7 +27,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class LivroController {
     
     @Autowired
-    private LivroRepository lr;
+    private LivroRepository livroRepository;
 
     @RequestMapping(value="/cadastrarLivro", method=RequestMethod.GET)
     public String form() {
@@ -35,9 +37,38 @@ public class LivroController {
     @RequestMapping(value="/cadastrarLivro", method=RequestMethod.POST)
     public String form(LivroModel livro) {
         
-        lr.save(livro);
+        livroRepository.save(livro);
         
         return "livro/formLivro";
+    }
+    
+    @RequestMapping(value="/livros")
+    public ModelAndView listaEventos() {
+        ModelAndView mv = new ModelAndView("index.html");
+        Iterable<LivroModel> livros = livroRepository.findAll();
+        mv.addObject("livros", livros);
+        return mv;
+    }
+    
+    @RequestMapping(value="/livros/{codigoLivro}")
+    public ModelAndView detalhesLivro(@PathVariable("codigoLivro") Long codigoLivro) {
+        LivroModel livro = livroRepository.findByCodL(codigoLivro);
+        ModelAndView mv = new ModelAndView("detalhesLivro.html");
+        mv.addObject("livro", livro);
+        return mv;
+    }
+    
+    @RequestMapping(value = "/livros/editar/{codigoLivro}", method = RequestMethod.GET)
+    public ModelAndView editarLivro(@PathVariable("codigoLivro") Long codigoLivro) {
+        LivroModel livro = livroRepository.findByCodL(codigoLivro);
+
+        if (livro == null) {
+            throw new IllegalArgumentException("Livro não encontrado para o código: " + codigoLivro);
+        }
+
+        ModelAndView mv = new ModelAndView("livro/editarLivro.html");
+        mv.addObject("livro", livro);
+        return mv;
     }
 
 //    // Exibir detalhes de um livro específico;

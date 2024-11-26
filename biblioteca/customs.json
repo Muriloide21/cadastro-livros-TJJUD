@@ -1,0 +1,18 @@
+{
+    "elements": {},
+    "attributes": {
+        "th:text": {
+            "context": "span"
+        },
+        "th:action": {},
+        "th:each": {
+            "context": "div"
+        },
+        "th:href": {
+            "context": "a"
+        },
+        "th:field": {
+            "context": "input"
+        }
+    }
+}

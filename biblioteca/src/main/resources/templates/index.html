@@ -3,15 +3,53 @@
 Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
 Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
 -->
-<html>
+<html xmlns:th="http://thymeleaf.org" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
     <head>
+        <!--Import Google Icon Font-->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+        <!--Import materialize.css-->
+        <link type="text/css" rel="stylesheet" href="materialize/css/materialize.min.css"  media="screen,projection"/>
+        
         <title>Teste</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="style/style.css"/>
     </head>
     <body>
-        <div>
-            <h1>Testando</h1>
-        </div>
+        <header>
+            <nav class="menu">
+                <div class="nav-wrapper">
+                  <a href="#" class="brand-logo">Lista de Livros</a>
+                  <ul id="nav-mobile" class="right hide-on-med-and-down">
+                    <li><a href="/cadastrarLivro" class="waves-effect waves-light btn"><i class="material-icons left">add_circle_outline</i>Cadastrar Livro</a></li>
+                  </ul>
+                </div>
+            </nav>
+	</header>
+        <table class="container">
+            <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Editora</th>
+                    <th>Edição</th>
+                    <th>Ano de Publicação</th>
+                    <th>Valor</th>
+                </tr>
+            </thead>
+            
+            <tbody>
+                <tr th:each="livro : ${livros}">
+                    <td><a th:href="${(#mvc.url('LC#editarLivro').arg(0, livro.codL)).build()}"><span th:text="${livro.titulo}"></span></a></td>
+                    <td><span th:text="${livro.editora}"></span></td>
+                    <td><span th:text="${livro.edicao}"></span></td>
+                    <td><span th:text="${livro.anoPublicacao}"></span></td>
+                    <td><span th:text="${livro.valor}"></span></td>
+                </tr>
+            </tbody>
+        </table>
+        
+        
+        <script src="materialize/js/materialize.min.js"></script>
     </body>
 </html>

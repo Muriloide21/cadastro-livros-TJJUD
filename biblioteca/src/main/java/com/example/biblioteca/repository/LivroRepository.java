@@ -16,5 +16,5 @@ import org.springframework.data.repository.CrudRepository;
  */
 @Repository
 public interface LivroRepository extends CrudRepository<LivroModel,Long> {
-    
+    LivroModel findByCodL(Long codL);
 }

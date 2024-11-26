@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://thymeleaf.org" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+    <head>
+        <!--Import Google Icon Font-->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+        <!--Import materialize.css-->
+        <link type="text/css" rel="stylesheet" href="/materialize/css/materialize.min.css" media="screen,projection"/>
+        <title>Detalhes do Livro</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="/style/style.css"/>
+    </head>
+    <body>
+        <header>
+            <nav class="menu">
+                <div class="nav-wrapper">
+                    <a href="#" class="brand-logo">Detalhes do Livro</a>
+                    <ul id="nav-mobile" class="right hide-on-med-and-down">
+                        <li>
+                            <a href="/livros" class="waves-effect waves-light btn">
+                                <i class="material-icons left">arrow_back</i>Voltar
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+
+        <div class="container formLivro">
+            <h5>Editar Livro</h5>
+            <form class="container" method="post" th:action="@{/livros/editar}" th:object="${livro}">
+                <input type="hidden" th:field="*{codL}" />
+
+                <div class="row">
+                    <div class="input-field col s6">
+                        <input id="titulo" type="text" name="titulo" th:field="*{titulo}" placeholder="Digite o título do livro">
+                        <label for="titulo">Título</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s2">
+                        <div class="row">
+                            <label for="editora">Editora:</label>
+                        </div>
+                        <div class="row">
+                            <input id="editora" type="text" name="editora" th:field="*{editora}" placeholder="Digite a editora">
+                        </div>
+                    </div>
+                    <div class="input-field col s3">
+                        <div class="row">
+                            <label for="edicao">Edição:</label>
+                        </div>
+                        <div class="row">
+                            <input id="edicao" type="number" name="edicao" th:field="*{edicao}" placeholder="Número da edição">
+                        </div>
+                    </div>
+                    <div class="input-field col s3">
+                        <div class="row">
+                            <label for="anoPublicacao">Ano Publicação:</label>
+                        </div>
+                        <div class="row">
+                            <input id="anoPublicacao" type="number" name="anoPublicacao" th:field="*{anoPublicacao}" placeholder="Ano de publicação">
+                        </div>
+                    </div>
+                    <div class="input-field col s3">
+                        <div class="row">
+                            <label for="valor">Valor:</label>
+                        </div>
+                        <div class="row">
+                            <input id="valor" type="number" step="0.01" name="valor" th:field="*{valor}" placeholder="Valor do livro">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col s6">
+                        <button class="waves-effect waves-light btn" type="submit">
+                            <i class="material-icons left">save</i>Salvar Alterações
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <script src="materialize/js/materialize.min.js"></script>
+    </body>
+</html>
+
