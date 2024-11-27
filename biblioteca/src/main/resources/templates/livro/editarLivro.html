@@ -3,88 +3,119 @@
 <html xmlns:th="http://thymeleaf.org" 
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
     <head>
-        <!--Import Google Icon Font-->
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
-        <!--Import materialize.css-->
-        <link type="text/css" rel="stylesheet" href="/materialize/css/materialize.min.css" media="screen,projection"/>
         <title>Detalhes do Livro</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="/style/style.css"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+        
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
     </head>
     <body>
         <header>
-            <nav class="menu">
+            <nav class="menu blue darken-3">
                 <div class="nav-wrapper">
-                    <a href="#" class="brand-logo">Detalhes do Livro</a>
+                    <a href="#" class="brand-logo">Biblioteca</a>
                     <ul id="nav-mobile" class="right hide-on-med-and-down">
-                        <li>
-                            <a href="/livros" class="waves-effect waves-light btn">
-                                <i class="material-icons left">arrow_back</i>Voltar
-                            </a>
-                        </li>
+                        <li><a href="/livros">Livros</a></li>
+                        <li><a href="/autores">Autores</a></li>
+                        <li><a href="/assuntos">Assuntos</a></li>
                     </ul>
                 </div>
             </nav>
         </header>
 
-        <div class="container formLivro">
-            <h5>Editar Livro</h5>
-            <form class="container" method="post" th:action="@{/livros/editar}" th:object="${livro}">
-                <input type="hidden" th:field="*{codL}" />
-
-                <div class="row">
-                    <div class="input-field col s6">
-                        <input id="titulo" type="text" name="titulo" th:field="*{titulo}" placeholder="Digite o título do livro">
-                        <label for="titulo">Título</label>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="input-field col s2">
-                        <div class="row">
-                            <label for="editora">Editora:</label>
+        <main class="container container-center">
+            <h1>Detalhes do Livro</h1>
+            <a href="/livros" class="btn btn-flat white blue-text">
+                <i class="material-icons left">arrow_back</i>Voltar
+            </a>
+     
+            <section class="form z-depth-5">
+                <h5>Editar Livro</h5>
+                <form class="" method="post" th:action="@{/livros/editar}" th:object="${livro}">
+                    <input type="hidden" th:field="*{codL}" />
+                    <!-- Título e Editora -->
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input id="titulo" type="text" name="titulo" th:field="*{titulo}" placeholder="Digite o título do livro">
+                            <label for="titulo">Título</label>
                         </div>
-                        <div class="row">
+                        <div class="input-field col s6">
+                            <label for="editora">Editora:</label>
                             <input id="editora" type="text" name="editora" th:field="*{editora}" placeholder="Digite a editora">
                         </div>
                     </div>
-                    <div class="input-field col s3">
-                        <div class="row">
+                    <!-- Edicao e Ano de Publicacao -->
+                    <div class="row">
+                        <div class="input-field col s4">
                             <label for="edicao">Edição:</label>
-                        </div>
-                        <div class="row">
                             <input id="edicao" type="number" name="edicao" th:field="*{edicao}" placeholder="Número da edição">
                         </div>
-                    </div>
-                    <div class="input-field col s3">
-                        <div class="row">
+                        <div class="input-field col s4">
                             <label for="anoPublicacao">Ano Publicação:</label>
-                        </div>
-                        <div class="row">
                             <input id="anoPublicacao" type="number" name="anoPublicacao" th:field="*{anoPublicacao}" placeholder="Ano de publicação">
                         </div>
-                    </div>
-                    <div class="input-field col s3">
-                        <div class="row">
+                        <div class="input-field col s4">
                             <label for="valor">Valor:</label>
-                        </div>
-                        <div class="row">
                             <input id="valor" type="number" step="0.01" name="valor" th:field="*{valor}" placeholder="Valor do livro">
                         </div>
                     </div>
-                </div>
-
-                <div class="row">
-                    <div class="col s6">
-                        <button class="waves-effect waves-light btn" type="submit">
-                            <i class="material-icons left">save</i>Salvar Alterações
-                        </button>
+                    <!-- Valor -->
+                    <div class="row">
+                        
+                        <!-- Relacionar Autores -->
+                        <div class="input-field col s6">
+                            <label for="autores">Autores:</label>
+                            <select id="autores" name="autoresIds" multiple class="select2-autores">
+                                <option th:each="autor : ${autores}" 
+                                        th:value="${autor.codAu}" 
+                                        th:selected="${#lists.contains(autoresAssociados, autor.codAu)}" 
+                                        th:text="${autor.nome}">
+                                </option>
+                            </select>
+                        </div>
+                        
+                        <div class="input-field col s6">
+                            <label for="assuntos">Assuntos:</label>
+                            <select id="assuntos" name="assuntosIds" multiple class="select2-assuntos">
+                                <option th:each="assunto : ${assuntos}" 
+                                        th:value="${assunto.codAs}" 
+                                        th:selected="${#lists.contains(assuntosAssociados, assunto.codAs)}" 
+                                        th:text="${assunto.descricao}">
+                                </option>
+                            </select>
+                        </div>
                     </div>
-                </div>
-            </form>
-        </div>
+                    <!-- Salvar -->
+                    <div class="row">
+                        <div class="col s6">
+                            <button class="waves-effect waves-light btn blue darken-3" type="submit">
+                                <i class="material-icons left">save</i>Salvar Alterações
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </section>
+        </main>
 
-        <script src="materialize/js/materialize.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+        
+        <script>
+            $(document).ready(function() {
+                $('.select2-autores').select2({
+                    placeholder: "Selecione autores",
+                    allowClear: true
+                });
+                $('.select2-assuntos').select2({
+                    placeholder: "Selecione assuntos",
+                    allowClear: true
+                });
+            });
+        </script>
     </body>
 </html>
 

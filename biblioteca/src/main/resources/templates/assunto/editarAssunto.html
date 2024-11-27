@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://thymeleaf.org" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+    <head>
+        <!--Import Google Icon Font-->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+        <!--Import materialize.css-->
+        <title>Edição do Autor</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="/style/style.css"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    </head>
+    <body>
+        <header>
+            <nav class="menu blue darken-3">
+                <div class="nav-wrapper">
+                    <a href="#" class="brand-logo">Biblioteca</a>
+                    <ul id="nav-mobile" class="right hide-on-med-and-down">
+                        <li><a href="/livros">Livros</a></li>
+                        <li><a href="/autores">Autores</a></li>
+                        <li><a href="/assuntos">Assuntos</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+
+        <main class="container container-center">
+            <h1>Detalhes do Assunto</h1>
+            <a href="/assuntos" class="btn btn-flat white blue-text">
+                <i class="material-icons left">arrow_back</i>Lista de Assuntos
+            </a>
+     
+            <section class="form z-depth-5">
+                <h5>Editar Assunto</h5>
+                <form class="" method="post" th:action="@{/assuntos/editar}" th:object="${assunto}">
+                    <input type="hidden" th:field="*{codAs}" />
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input id="descricao" type="text" name="descricao" th:field="*{descricao}" placeholder="Digite a descrição do Assunto">
+                            <label for="descricao">Descrição</label>
+                        </div>
+                    </div>
+                    <!-- Salvar -->
+                    <div class="row">
+                        <div class="col s6">
+                            <button class="waves-effect waves-light btn blue darken-3" type="submit">
+                                <i class="material-icons left">save</i>Salvar Alterações
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </section>
+        </main>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    </body>
+</html>
+

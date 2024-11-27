@@ -11,7 +11,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
         <!--Import materialize.css-->
         <link type="text/css" rel="stylesheet" href="materialize/css/materialize.min.css"  media="screen,projection"/>
 
-        <title>Teste</title>
+        <title>Lista de Autores</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="style/style.css"/>
@@ -31,39 +31,30 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
         </header>
 
         <main class="container">
-            <section id="listaLivros">
+            <section id="listaAutores">
                 <div class="space-between">
-                    <h2>Lista de Livros</h2>
-                    <a href="/cadastrarLivro" class="waves-effect waves-light btn blue darken-3"><i class="material-icons left">add_circle_outline</i>Cadastrar Livro</a>
+                    <h2>Lista de Autores</h2>
+                    <a href="/cadastrarAutor" class="waves-effect waves-light btn blue darken-3"><i class="material-icons left">add_circle_outline</i>Cadastrar Autor</a>
                 </div>
 
                 <table >
                     <thead>
                         <tr>
-                            <th>Título</th>
-                            <th>Editora</th>
-                            <th>Edição</th>
-                            <th>Ano de Publicação</th>
-                            <th>Valor</th>
-                            <th>Ações</th>
+                            <th>Nome</th>
                         </tr>
                     </thead>
 
                     <tbody>
-                        <tr th:each="livro : ${livros}">
-                            <td><a th:href="${(#mvc.url('LC#editarLivro').arg(0, livro.codL)).build()}"><span th:text="${livro.titulo}"></span></a></td>
-                            <td><span th:text="${livro.editora}"></span></td>
-                            <td><span th:text="${livro.edicao}"></span></td>
-                            <td><span th:text="${livro.anoPublicacao}"></span></td>
-                            <td><span th:text="${livro.valor}"></span></td>
+                        <tr th:each="autor : ${autores}">
+                            <td><span th:text="${autor.nome}"></span></td>
                             <td><!-- Botão de editar -->
-                                <a th:href="@{/livros/editar/{codigoLivro}(codigoLivro=${livro.codL})}" class="btn blue darken-3">
+                                <a th:href="@{/autores/editar/{codigoAutor}(codigoAutor=${autor.codAu})}" class="btn blue darken-3">
                                     <i class="material-icons">edit</i>
                                 </a>
                                 <!-- Botão de excluir -->
-                                <a th:href="@{/livros/deletar/{codigoLivro}(codigoLivro=${livro.codL})}" 
+                                <a th:href="@{/autores/deletar/{codigoAutor}(codigoAutor=${autor.codAu})}" 
                                    class="btn red darken-4" 
-                                   onclick="return confirm('Tem certeza que deseja excluir este livro?');">
+                                   onclick="return confirm('Tem certeza que deseja excluir este Autor?');">
                                     <i class="material-icons">delete</i>
                                 </a>
                             </td>

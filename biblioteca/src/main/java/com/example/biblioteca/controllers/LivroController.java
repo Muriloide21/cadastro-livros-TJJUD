@@ -4,9 +4,19 @@
  */
 package com.example.biblioteca.controllers;
 
+import com.example.biblioteca.models.AssuntoModel;
+import com.example.biblioteca.models.AutorModel;
+import com.example.biblioteca.models.LivroAssuntoModel;
+import com.example.biblioteca.models.LivroAutorModel;
 import com.example.biblioteca.models.LivroModel;
+import com.example.biblioteca.repository.AssuntoRepository;
+import com.example.biblioteca.repository.AutorRepository;
+import com.example.biblioteca.repository.LivroAssuntoRepository;
+import com.example.biblioteca.repository.LivroAutorRepository;
 import com.example.biblioteca.repository.LivroRepository;
 import jakarta.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -17,6 +27,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -25,39 +36,56 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 public class LivroController {
-    
+
     @Autowired
     private LivroRepository livroRepository;
+    
+    @Autowired
+    private AutorRepository autorRepository;
+    
+    @Autowired
+    private AssuntoRepository assuntoRepository;
+    
+    @Autowired
+    private LivroAutorRepository livroAutorRepository;
+    
+    @Autowired
+    private LivroAssuntoRepository livroAssuntoRepository;
 
-    @RequestMapping(value="/cadastrarLivro", method=RequestMethod.GET)
-    public String form() {
-        return "livro/formLivro";
+    @RequestMapping(value = "/cadastrarLivro", method = RequestMethod.GET)
+    public ModelAndView form() {
+        List<AutorModel> autores = (List<AutorModel>) autorRepository.findAll();
+        List<AssuntoModel> assuntos = (List<AssuntoModel>) assuntoRepository.findAll();
+        ModelAndView mv = new ModelAndView("livro/formLivro.html");
+        mv.addObject("autores", autores);
+        mv.addObject("assuntos", assuntos);
+        return mv;
     }
-    
-    @RequestMapping(value="/cadastrarLivro", method=RequestMethod.POST)
+
+    @RequestMapping(value = "/cadastrarLivro", method = RequestMethod.POST)
     public String form(LivroModel livro) {
-        
+
         livroRepository.save(livro);
-        
+
         return "livro/formLivro";
     }
-    
-    @RequestMapping(value="/livros")
-    public ModelAndView listaEventos() {
+
+    @RequestMapping(value = "/livros")
+    public ModelAndView listaLivros() {
         ModelAndView mv = new ModelAndView("index.html");
         Iterable<LivroModel> livros = livroRepository.findAll();
         mv.addObject("livros", livros);
         return mv;
     }
-    
-    @RequestMapping(value="/livros/{codigoLivro}")
+
+    @RequestMapping(value = "/livros/{codigoLivro}")
     public ModelAndView detalhesLivro(@PathVariable("codigoLivro") Long codigoLivro) {
         LivroModel livro = livroRepository.findByCodL(codigoLivro);
         ModelAndView mv = new ModelAndView("detalhesLivro.html");
         mv.addObject("livro", livro);
         return mv;
     }
-    
+
     @RequestMapping(value = "/livros/editar/{codigoLivro}", method = RequestMethod.GET)
     public ModelAndView editarLivro(@PathVariable("codigoLivro") Long codigoLivro) {
         LivroModel livro = livroRepository.findByCodL(codigoLivro);
@@ -65,35 +93,71 @@ public class LivroController {
         if (livro == null) {
             throw new IllegalArgumentException("Livro não encontrado para o código: " + codigoLivro);
         }
+        
+        List<AutorModel> autores = (List<AutorModel>) autorRepository.findAll();
+        List<Long> autoresAssociados = livroAutorRepository.findAutoresByLivroId(codigoLivro);
+        
+        List<AssuntoModel> assuntos = (List<AssuntoModel>) assuntoRepository.findAll();
+        List<Long> assuntosAssociados = livroAssuntoRepository.findAssuntosByLivroId(codigoLivro);
 
         ModelAndView mv = new ModelAndView("livro/editarLivro.html");
         mv.addObject("livro", livro);
+        mv.addObject("autores", autores);
+        mv.addObject("assuntos", assuntos);
+        mv.addObject("autoresAssociados", autoresAssociados);
+        mv.addObject("assuntosAssociados", assuntosAssociados);
         return mv;
     }
 
-//    // Exibir detalhes de um livro específico;
-//    @GetMapping("/{id}")
-//    public String detalhesLivro(@PathVariable Long id, Model model) {
-//        LivroModel livro = lr.findById(id)
-//            .orElseThrow(() -> new IllegalArgumentException("Livro não encontrado: " + id));
-//        model.addAttribute("livro", livro);
-//        return "livro/detalhesLivro";
-//    }
-//
-//    // Deletar um livro
-//    @GetMapping("/deletar/{id}")
-//    public String deletarLivro(@PathVariable Long id) {
-//        LivroModel livro = lr.findById(id)
-//            .orElseThrow(() -> new IllegalArgumentException("Livro não encontrado: " + id));
-//        lr.delete(livro);
-//        return "redirect:/livros";
-//    }
-//
-//    // Listar todos os livros
-//    @GetMapping
-//    public String listarLivros(Model model) {
-//        model.addAttribute("livros", lr.findAll());
-//        return "livro/listarLivros";
-//    }
-    
+    @RequestMapping(value = "/livros/editar", method = RequestMethod.POST)
+    public String salvarAlteracoesLivro(@ModelAttribute LivroModel livro, 
+                                        @RequestParam(value = "autoresIds", required = false) List<Long> autoresIds,
+                                        @RequestParam(value = "assuntosIds", required = false) List<Long> assuntosIds) 
+    {
+        livroRepository.save(livro);
+
+        livroAutorRepository.deleteByLivroId(livro.getCodL());
+        
+        if (autoresIds != null) {
+            List<LivroAutorModel> novasAssociacoes = new ArrayList<>();
+            for (Long autorId : autoresIds) {
+                AutorModel autor = autorRepository.findByCodAu(autorId);
+                LivroAutorModel associacao = new LivroAutorModel();
+                associacao.setLivro(livro);
+                associacao.setAutor(autor);
+                novasAssociacoes.add(associacao);
+            }
+            livroAutorRepository.saveAll(novasAssociacoes);
+        }
+        
+        livroAssuntoRepository.deleteByLivroId(livro.getCodL());
+        
+        if (assuntosIds != null) {
+            List<LivroAssuntoModel> novasAssociacoes = new ArrayList<>();
+            for (Long assuntoId : assuntosIds) {
+                AssuntoModel assunto = assuntoRepository.findByCodAs(assuntoId);
+                LivroAssuntoModel associacao = new LivroAssuntoModel();
+                associacao.setLivro(livro);
+                associacao.setAssunto(assunto);
+                novasAssociacoes.add(associacao);
+            }
+            livroAssuntoRepository.saveAll(novasAssociacoes);
+        }
+        
+        return "redirect:/livros";
+    }
+
+    @RequestMapping(value = "/livros/deletar/{codigoLivro}", method = RequestMethod.GET)
+    public String deletarLivro(@PathVariable("codigoLivro") Long codigoLivro) {
+        LivroModel livro = livroRepository.findByCodL(codigoLivro);
+
+        if (livro == null) {
+            throw new IllegalArgumentException("Livro não encontrado para o código: " + codigoLivro);
+        }
+
+        livroAutorRepository.deleteByLivroId(livro.getCodL());
+        livroRepository.delete(livro);
+        return "redirect:/livros";
+    }
+
 }
