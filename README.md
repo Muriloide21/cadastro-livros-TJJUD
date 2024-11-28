@@ -18,6 +18,12 @@ Execute o Jar File:
 java -jar biblioteca-0.0.1-SNAPSHOT.jar
 ```
 
+Verifique se a aplicação está rodando em:
+
+```
+http://localhost:8080/
+```
+
 ## Criação de View necessária para relatório
 
 ### Acesse o h2-console
