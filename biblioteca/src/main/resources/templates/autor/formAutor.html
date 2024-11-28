@@ -10,7 +10,7 @@
         <title>Cadastro de Autor</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="style/style.css"/>
+        <link rel="stylesheet" href="/style/style.css"/>
     </head>
     <body>
         <header>
@@ -38,6 +38,7 @@
                         <div class="input-field col s6">
                             <input id="nome" type="text" name="nome"  value="" placeholder="Nome do Autor">
                             <label for="nome">Nome do Autor</label>
+                            <span th:if="${erros != null and erros['nome'] != null}" th:text="${erros['nome']}" class="error-field"></span>
                         </div>
                     </div>
                     <!-- Salvar -->

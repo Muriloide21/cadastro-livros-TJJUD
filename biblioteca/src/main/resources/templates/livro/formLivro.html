@@ -6,12 +6,12 @@
         <!--Import Google Icon Font-->
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
         <!--Import materialize.css-->
-         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
         <title>Cadastro de Livro</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="style/style.css"/>
-        
+        <link rel="stylesheet" href="/style/style.css"/>
+
         <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
     </head>
     <body>
@@ -27,7 +27,7 @@
                 </div>
             </nav>
         </header>
-        
+
         <main class="container container-center">
             <h1>Cadastro de Livro</h1>
             <a href="/livros" class="btn btn-flat white blue-text">
@@ -35,56 +35,64 @@
             </a>
             <section class="form z-depth-5">
                 <h5>Novo Livro</h5>
-                <form class="" method="post" th:action="@{/livros/editar}">
+                <form class="" method="post" th:action="@{/cadastrarLivro}">
                     <!-- Título e Editora -->
                     <div class="row">
                         <div class="input-field col s6">
                             <input id="titulo" type="text" name="titulo"  value="" placeholder="Digite o título do livro">
                             <label for="titulo">Título</label>
+                             <span th:if="${erros != null and erros['titulo'] != null}" th:text="${erros['titulo']}" class="error-field"></span>
                         </div>
                         <div class="input-field col s6">
                             <label for="editora">Editora:</label>
                             <input id="editora" type="text" name="editora" value="" placeholder="Digite a editora">
+                            <span th:if="${erros != null and erros['editora'] != null}" th:text="${erros['editora']}" class="error-field"></span>
                         </div>
                     </div>
                     <!-- Edicao e Ano de Publicacao -->
                     <div class="row">
-                        <div class="input-field col s4">
+                        <div class="input-field col s3">
                             <label for="edicao">Edição:</label>
                             <input id="edicao" type="number" name="edicao"  value="" placeholder="Número da edição">
+                            <span th:if="${erros != null and erros['edicao'] != null}" th:text="${erros['edicao']}" class="error-field"></span>
                         </div>
-                        <div class="input-field col s4">
+                        <div class="input-field col s3">
                             <label for="anoPublicacao">Ano Publicação:</label>
                             <input id="anoPublicacao" type="number" name="anoPublicacao" value="" placeholder="Ano de publicação">
+                            <span th:if="${erros != null and erros['anoPublicacao'] != null}" th:text="${erros['anoPublicacao']}" class="error-field"></span>
                         </div>
-                        <div class="input-field col s4">
+                        <div class="input-field col s6">
                             <label for="valor">Valor:</label>
                             <input id="valor" type="number" step="0.01" name="valor" value="" placeholder="Valor do livro">
+                            <span th:if="${erros != null and erros['valor'] != null}" th:text="${erros['valor']}" class="error-field"></span>
                         </div>
                     </div>
                     <!-- Valor -->
                     <div class="row">
                         <!-- Relacionar Autores -->
                         <div class="input-field col s6">
-                            <label for="autores">Autores:</label>
-                            <select id="autores" name="autoresIds" multiple class="select2-autores">
+                            
+                            <select id="autores" name="autoresIds" multiple>
                                 <option th:each="autor : ${autores}" 
                                         th:value="${autor.codAu}" 
                                         th:text="${autor.nome}">
                                 </option>
                             </select>
+                            <label>Autores:</label>
                         </div>
                         <div class="input-field col s6">
-                            <label for="assuntos">Assuntos:</label>
-                            <select id="assuntos" name="assuntosIds" multiple class="select2-assuntos">
+                            
+                            <select id="assuntos" name="assuntosIds" multiple>
                                 <option th:each="assunto : ${assuntos}" 
                                         th:value="${assunto.codAs}" 
                                         th:text="${assunto.descricao}">
                                 </option>
                             </select>
+                            <label>Assuntos:</label>
                         </div>
                     </div>
-                    
+                
+
                     <!-- Salvar -->
                     <div class="row">
                         <div class="col s6">
@@ -102,18 +110,22 @@
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
-        
+
+
         <script>
-            $(document).ready(function() {
-                $('.select2-autores').select2({
-                    placeholder: "Selecione autores",
-                    allowClear: true
-                });
-                $('.select2-assuntos').select2({
-                    placeholder: "Selecione assuntos",
-                    allowClear: true
-                });
+//            $(document).ready(function () {
+//                $('.select2-autores').select2({
+//                    placeholder: "Selecione autores",
+//                    allowClear: true
+//                });
+//                $('.select2-assuntos').select2({
+//                    placeholder: "Selecione assuntos",
+//                    allowClear: true
+//                });
+//            });
+
+            $(document).ready(function () {
+                $('select').formSelect();
             });
         </script>
     </body>

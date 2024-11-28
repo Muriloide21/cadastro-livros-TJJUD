@@ -29,6 +29,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+
+
+import jakarta.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
+import org.springframework.validation.FieldError;
 
 /**
  *
@@ -52,10 +61,14 @@ public class LivroController {
     @Autowired
     private LivroAssuntoRepository livroAssuntoRepository;
 
+   
+    
     @RequestMapping(value = "/cadastrarLivro", method = RequestMethod.GET)
     public ModelAndView form() {
         List<AutorModel> autores = (List<AutorModel>) autorRepository.findAll();
         List<AssuntoModel> assuntos = (List<AssuntoModel>) assuntoRepository.findAll();
+        
+        
         ModelAndView mv = new ModelAndView("livro/formLivro.html");
         mv.addObject("autores", autores);
         mv.addObject("assuntos", assuntos);
@@ -63,11 +76,23 @@ public class LivroController {
     }
 
     @RequestMapping(value = "/cadastrarLivro", method = RequestMethod.POST)
-    public String form(LivroModel livro) {
+    public String form(@Valid LivroModel livro, BindingResult bindingResult, Model model) {
+        // Se houver erros de validação, retornar o formulário com os erros
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("livro", livro);
+            // Crie um mapa para erros, associando cada erro com um campo específico
+            Map<String, String> erros = new HashMap<>();
+
+            for (FieldError error : bindingResult.getFieldErrors()) {
+                erros.put(error.getField(), error.getDefaultMessage());
+            }
+
+            model.addAttribute("erros", erros);
+            return "livro/formLivro";
+        }
 
         livroRepository.save(livro);
-
-        return "livro/formLivro";
+        return "redirect:/livros";
     }
 
     @RequestMapping(value = "/livros")
@@ -91,7 +116,7 @@ public class LivroController {
         LivroModel livro = livroRepository.findByCodL(codigoLivro);
 
         if (livro == null) {
-            throw new IllegalArgumentException("Livro não encontrado para o código: " + codigoLivro);
+            throw new EmptyResultDataAccessException("Livro não encontrado para o código: " + codigoLivro,1);
         }
         
         List<AutorModel> autores = (List<AutorModel>) autorRepository.findAll();
@@ -110,10 +135,25 @@ public class LivroController {
     }
 
     @RequestMapping(value = "/livros/editar", method = RequestMethod.POST)
-    public String salvarAlteracoesLivro(@ModelAttribute LivroModel livro, 
+    public String salvarAlteracoesLivro(@Valid @ModelAttribute LivroModel livro, 
                                         @RequestParam(value = "autoresIds", required = false) List<Long> autoresIds,
-                                        @RequestParam(value = "assuntosIds", required = false) List<Long> assuntosIds) 
+                                        @RequestParam(value = "assuntosIds", required = false) List<Long> assuntosIds, 
+                                        BindingResult bindingResult, Model model) 
     {
+        // Se houver erros de validação, retornar o formulário com os erros
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("livro", livro);
+            // Crie um mapa para erros, associando cada erro com um campo específico
+            Map<String, String> erros = new HashMap<>();
+
+            for (FieldError error : bindingResult.getFieldErrors()) {
+                erros.put(error.getField(), error.getDefaultMessage());
+            }
+
+            model.addAttribute("erros", erros);
+            return "livro/editarLivro";
+        }
+
         livroRepository.save(livro);
 
         livroAutorRepository.deleteByLivroId(livro.getCodL());
@@ -143,7 +183,7 @@ public class LivroController {
             }
             livroAssuntoRepository.saveAll(novasAssociacoes);
         }
-        
+
         return "redirect:/livros";
     }
 
@@ -152,12 +192,13 @@ public class LivroController {
         LivroModel livro = livroRepository.findByCodL(codigoLivro);
 
         if (livro == null) {
-            throw new IllegalArgumentException("Livro não encontrado para o código: " + codigoLivro);
+            throw new EmptyResultDataAccessException("Livro não encontrado para o código: " + codigoLivro,1);
         }
 
         livroAutorRepository.deleteByLivroId(livro.getCodL());
+        livroAssuntoRepository.deleteByLivroId(livro.getCodL());
         livroRepository.delete(livro);
         return "redirect:/livros";
     }
-
 }
+

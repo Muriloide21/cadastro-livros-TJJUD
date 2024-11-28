@@ -10,6 +10,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 /**
  *
@@ -24,6 +26,8 @@ public class AssuntoModel {
     private Long codAs; // Código do Assunto
 
     @Column(length = 20, nullable = false)
+    @NotNull(message = "A descrição do assunto não pode ser nula")
+    @Size(min = 3, max = 20, message = "A descrição do assunto deve ter entre 3 e 20 caracteres")
     private String descricao; // Descrição do Assunto
 
     public Long getCodAs() {

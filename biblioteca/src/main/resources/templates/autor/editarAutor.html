@@ -31,7 +31,7 @@
             <a href="/autores" class="btn btn-flat white blue-text">
                 <i class="material-icons left">arrow_back</i>Lista de Autores
             </a>
-     
+
             <section class="form z-depth-5">
                 <h5>Editar Autor</h5>
                 <form class="" method="post" th:action="@{/autores/editar}" th:object="${autor}">
@@ -41,6 +41,7 @@
                         <div class="input-field col s6">
                             <input id="nome" type="text" name="nome" th:field="*{nome}" placeholder="Digite o nome do Autor">
                             <label for="nome">Nome do Autor</label>
+                            <span th:if="${erros != null and erros['nome'] != null}" th:text="${erros['nome']}" class="error-field"></span>
                         </div>
                     </div>
                     <!-- Salvar -->

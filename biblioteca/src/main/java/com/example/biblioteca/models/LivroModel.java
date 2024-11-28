@@ -10,6 +10,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
 
 /**
@@ -24,19 +27,30 @@ public class LivroModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long codL;
+
     
-    @Column(length = 40)
+    @Size(min = 3, max = 100, message = "O título deve ter entre 3 e 100 caracteres.")
+    @Column(length = 100, nullable = false)
+    @NotNull(message = "O título não pode ser nulo.")
     private String titulo;
-    
+
+    @Size(min=2, max = 40, message = "A editora pode ter no máximo 40 caracteres.")
     @Column(length = 40)
+    @NotNull(message = "A editora não pode ser nulo.")
     private String editora;
-    
+
+    @Min(value = 1, message = "A edição deve ser um número positivo.")
+    @NotNull(message = "A edição não pode ser nulo.")
     private Integer edicao;
-    
-    @Column(length = 4)
+
+    @Min(value = 1500, message = "O ano de publicação deve ser posterior a 1500.")
+    @NotNull(message = "O ano de publicação não pode ser nulo.")
     private Integer anoPublicacao;
+
     
-    @Column(precision = 10, scale = 2)
+    @Min(value = 0, message = "O valor não pode ser negativo.")
+    @Column(precision = 10, scale = 2, nullable = false)
+    @NotNull(message = "O valor não pode ser nulo.")
     private BigDecimal valor;
 
     public Long getCodL() {

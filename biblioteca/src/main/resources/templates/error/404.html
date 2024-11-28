@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html>
+    <head>
+        <title>Erro 404 - Página Não Encontrada</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+        <!-- Import Google Font -->
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="/style/style.css"/>
+    </head>
+    <body class="body-error">
+        <div class="container container-center">
+            <h1 class="error-title">Erro 404</h1>
+            <h5 class="error-subtitle">Recurso não encontrado</h5>
+            <p class="error-message" th:text="${message}">A página que você está procurando não existe ou foi removida.</p>
+            <img src="https://http.cat/404" alt="Gato erro 404" class="error-image">
+          
+            <a href="/" class="btn red">Voltar para a página inicial</a>
+        </div>
+
+        <!-- Import Materialize JavaScript -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    </body>
+</html>

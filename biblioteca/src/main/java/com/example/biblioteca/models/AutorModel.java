@@ -10,6 +10,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 /**
  *
@@ -24,7 +26,9 @@ public class AutorModel {
     private Long codAu;
 
     @Column(length = 40, nullable = false)
-    private String nome; 
+    @NotNull(message = "O nome do autor não pode ser nulo")
+    @Size(min = 2, max = 40, message = "O nome do autor deve ter entre 2 e 40 caracteres")
+    private String nome;
 
     public Long getCodAu() {
         return codAu;

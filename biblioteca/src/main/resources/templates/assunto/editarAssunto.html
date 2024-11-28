@@ -40,6 +40,7 @@
                         <div class="input-field col s6">
                             <input id="descricao" type="text" name="descricao" th:field="*{descricao}" placeholder="Digite a descrição do Assunto">
                             <label for="descricao">Descrição</label>
+                            <span th:if="${erros != null and erros['descricao'] != null}" th:text="${erros['descricao']}" class="error-field"></span>
                         </div>
                     </div>
                     <!-- Salvar -->
