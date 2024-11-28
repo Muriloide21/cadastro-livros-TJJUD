@@ -78,3 +78,9 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     color: #721c24; /* Cor do texto para corresponder ao estilo de erro */
 
 }
+
+table th,
+table td {
+    text-align: center; /* Centraliza o conteúdo */
+    vertical-align: middle; /* Alinha verticalmente ao centro */
+}
