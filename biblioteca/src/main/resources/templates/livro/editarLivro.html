@@ -34,7 +34,7 @@
            
             <section class="form z-depth-5">
                 <h5>Editar Livro</h5>
-                <form class="" method="post" th:action="@{/livros/editar}" th:object="${livro}">
+                <form id="livroForm" class="" method="post" th:action="@{/livros/editar}" th:object="${livro}">
                     <input type="hidden" th:field="*{codL}" />
                     <!-- Título e Editora -->
                     <div class="row">
@@ -111,18 +111,18 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
         <script>
-//            $(document).ready(function() {
-//                $('.select2-autores').select2({
-//                    placeholder: "Selecione autores",
-//                    allowClear: true
-//                });
-//                $('.select2-assuntos').select2({
-//                    placeholder: "Selecione assuntos",
-//                    allowClear: true
-//                });
-//            });
             $(document).ready(function () {
                 $('select').formSelect();
+            });
+            
+            document.getElementById('livroForm').addEventListener('submit', function(event) {
+                const autores = document.getElementById('autores').selectedOptions.length;
+                const assuntos = document.getElementById('assuntos').selectedOptions.length;
+
+                if (autores === 0 || assuntos === 0) {
+                    event.preventDefault();
+                    alert('Selecione pelo menos um autor e um assunto.');
+                }
             });
         </script>
     </body>
