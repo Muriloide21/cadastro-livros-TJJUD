@@ -32,6 +32,9 @@ http://localhost:8080/
 http://localhost:8080/h2-console/
 ```
 
+![image](https://github.com/user-attachments/assets/a1f904ad-72f4-4339-80b9-b514603612bf)
+
+
 Utilize as credenciais definidas no application.properties para logar na interface do H2. Por padrão são:
 
 ```
