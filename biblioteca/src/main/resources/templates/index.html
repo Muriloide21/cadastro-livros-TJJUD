@@ -57,7 +57,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                             <td><span th:text="${livro.editora}"></span></td>
                             <td><span th:text="${livro.edicao}"></span></td>
                             <td><span th:text="${livro.anoPublicacao}"></span></td>
-                            <td><span th:text="${livro.valor}"></span></td>
+                            <td><span class="valor" th:text="${livro.valor}"></span></td>
                             <td><!-- Botão de editar -->
                                 <a th:href="@{/livros/editar/{codigoLivro}(codigoLivro=${livro.codL})}" class="btn blue darken-3">
                                     <i class="material-icons">edit</i>
@@ -74,8 +74,23 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 </table>
             </section>
         </main>
-
-
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="materialize/js/materialize.min.js"></script>
+        <script>
+                                       $(document).ready(function () {
+                                           // Aplica a máscara de moeda a todos os elementos com a classe 'valor'
+                                           $('.valor').each(function () {
+                                               var valor = $(this).text();
+                                               var valorFormatado = formatarValor(valor);
+                                               $(this).text(valorFormatado);
+                                           });
+
+                                           function formatarValor(valor) {
+                                               valor = valor.replace(".", ",");
+                                               return "R$ " + valor;
+                                           }
+
+                                       });
+        </script>
     </body>
 </html>

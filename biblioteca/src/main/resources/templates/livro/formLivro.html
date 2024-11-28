@@ -41,7 +41,7 @@
                         <div class="input-field col s6">
                             <input id="titulo" type="text" name="titulo"  value="" placeholder="Digite o título do livro">
                             <label for="titulo">Título</label>
-                             <span th:if="${erros != null and erros['titulo'] != null}" th:text="${erros['titulo']}" class="error-field"></span>
+                            <span th:if="${erros != null and erros['titulo'] != null}" th:text="${erros['titulo']}" class="error-field"></span>
                         </div>
                         <div class="input-field col s6">
                             <label for="editora">Editora:</label>
@@ -71,7 +71,7 @@
                     <div class="row">
                         <!-- Relacionar Autores -->
                         <div class="input-field col s6">
-                            
+
                             <select id="autores" name="autoresIds" multiple>
                                 <option th:each="autor : ${autores}" 
                                         th:value="${autor.codAu}" 
@@ -81,7 +81,7 @@
                             <label>Autores:</label>
                         </div>
                         <div class="input-field col s6">
-                            
+
                             <select id="assuntos" name="assuntosIds" multiple>
                                 <option th:each="assunto : ${assuntos}" 
                                         th:value="${assunto.codAs}" 
@@ -91,7 +91,7 @@
                             <label>Assuntos:</label>
                         </div>
                     </div>
-                
+
 
                     <!-- Salvar -->
                     <div class="row">
@@ -116,8 +116,8 @@
             $(document).ready(function () {
                 $('select').formSelect();
             });
-            
-            document.getElementById('livroForm').addEventListener('submit', function(event) {
+
+            document.getElementById('livroForm').addEventListener('submit', function (event) {
                 const autores = document.getElementById('autores').selectedOptions.length;
                 const assuntos = document.getElementById('assuntos').selectedOptions.length;
 
@@ -126,6 +126,8 @@
                     alert('Selecione pelo menos um autor e um assunto.');
                 }
             });
+          
+
         </script>
     </body>
 </html>
